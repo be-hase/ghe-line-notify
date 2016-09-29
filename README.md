@@ -85,14 +85,14 @@ for example `export GHE_LN_SECRET_KEY=hoge`.
 
 ## Screenshots
 
-### Added Token List
+### Added Token Page
 
 ![](https://raw.githubusercontent.com/wiki/be-hase/ghe-line-notify/img/ss_list.png)
 
-###  Token Form
+###  Token Page
 
 ![](https://raw.githubusercontent.com/wiki/be-hase/ghe-line-notify/img/ss_list.png)
 
-###  Webhook Message Template Form
+###  Webhook Message Template Page
 
 ![](https://raw.githubusercontent.com/wiki/be-hase/ghe-line-notify/img/ss_tmpl.png)
