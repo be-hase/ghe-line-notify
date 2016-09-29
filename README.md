@@ -11,10 +11,10 @@ LINE Notify Gateway for Github Enterprise.
          | Send webhook.
          ▽
  ,---------------.
- |ghe-line-notify|
+ |ghe-line-notify| Receive Webhook and render message text.
  `---------------'
          |
-         | Receive Webhook, render text, and call notify API.
+         | Call LINE Notify API.
          ▽
    ,-----------.
    |LINE Notify|
