@@ -82,3 +82,17 @@ If you want to change config, set environment variables.
   * Default value is `to_be_overridden`.
 
 for example `export GHE_LN_SECRET_KEY=hoge`.
+
+## Screenshots
+
+### Added Token List
+
+![](https://raw.githubusercontent.com/wiki/be-hase/ghe-line-notify/img/ss_list.png)
+
+###  Token Form
+
+![](https://raw.githubusercontent.com/wiki/be-hase/ghe-line-notify/img/ss_list.png)
+
+###  Webhook Message Template Form
+
+![](https://raw.githubusercontent.com/wiki/be-hase/ghe-line-notify/img/ss_tmpl.png)
