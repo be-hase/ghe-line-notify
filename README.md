@@ -27,8 +27,8 @@ Let's try. [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://hero
 
 ### Prerequisites
 
-* Python 3.5
-* pip
+* Python 3.x (3.5.x recomended)
+* (pip)
 
 ### Setup
 
