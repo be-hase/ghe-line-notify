@@ -1,7 +1,7 @@
 # ghe-line-notify
 
-LINE Notify Gateway for Github Enterprise.
-Of course, you can use not only Github Enterprise but also Github.
+LINE Notify Gateway for Github Enterprise.  
+(Of course, you can use not only Github Enterprise but also Github.)
 
 ```
 ,-----------------.
