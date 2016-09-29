@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2 class="page-header">
+  Template Playground
+  <div class="pull-right">
+    <input type=hidden name=_csrf_token value="{{ csrf_token() }}">
+    <button class="btn btn-primary">Render</button>
+  </div>
+</h2>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+      <label>Payload JSON</label>
+      <span>
+        (Payload example is <a href="https://developer.github.com/v3/activity/events/types/" target="_blank">here</a>)
+      </span>
+      <textarea name="payload" class="form-control" rows="19"></textarea>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group">
+      <label>Template</label>
+      <span>
+        (Write by <a href="http://jinja.pocoo.org/docs/dev/" target="_blank">Jinja2</a>)
+      </span>
+      <textarea name="template" class="form-control" rows="9"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea name="result" class="form-control" rows="9" readonly></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    $('.btn-primary').on('click', function (event) {
+      $this = $(this);
+      $this.button('loading');
+
+      $.post('/api/template/playground', {
+        template: $('textarea[name="template"]').val(),
+        payload: $('textarea[name="payload"]').val(),
+        _csrf_token: $('input[name="_csrf_token"]').val()
+      }).done(function(data) {
+        $('textarea[name="result"]').val(data.result);
+      }).fail(function(jqXHR) {
+        try {
+          var json = JSON.parse(jqXHR.responseText);
+          alert(json.error.message);
+        } catch(e) {
+          alert('Error.');
+        }
+      }).always(function() {
+        $this.button('reset');
+      });
+    })
+  });
+</script>
+{% endblock %}

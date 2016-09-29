@@ -1,0 +1,17 @@
+{
+  "name": "ghe-line-notify",
+  "description": "ghe-line-notify",
+  "repository": "https://github.com/be-hase/ghe-line-notify",
+  "keywords": ["Github", "LINE", "LINE Notify"],
+  "env": {
+    "GHE_LN_SECRET_KEY": {
+      "description": "Secret key for session"
+    }
+  },
+  "scripts": {
+    "postdeploy": "python manage.py db upgrade"
+  },
+  "addons": [
+    "heroku-postgresql:hobby-dev"
+  ]
+}

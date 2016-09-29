@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2 class="page-header">
+    {% if is_new %}
+      Add Token
+    {% endif %}
+    {% if not is_new %}
+      Edit Token
+    {% endif %}
+  </h2>
+
+  <form method="post" autocomplete="off">
+    <h3>Basics</h3>
+    {% if code %}
+      <div class="form-group">
+        <label>Code</label>
+        <input type="text" name="code" value="{{ code }}" class="form-control" readonly>
+        <span class="help-block">
+          Github Payload URL: <code>{{ webhook_url }}</code>
+        </span>
+      </div>
+    {% endif %}
+
+    {% if is_new %}
+      <div class="form-group">
+        <label>Token (LINE Notify)</label>
+        <input type="password" name="token" value="" class="form-control" required maxlength="255">
+        <input type="hidden" name="token_update" value="true">
+      </div>
+    {% endif %}
+    {% if not is_new %}
+      <div class="form-group">
+        <label>Token (LINE Notify) - <a href="#" class="js-toggle-token-input">Edit</a></label>
+        <div class="js-token-mask-input">
+          <p class="form-control-static">
+            ∗∗∗∗∗∗∗∗∗∗∗∗∗∗∗∗
+          </p>
+        </div>
+        <div class="js-token-input">
+          <input type="password" name="token" value="" class="form-control" required maxlength="255">
+        </div>
+        <input type="hidden" name="token_update" value="false">
+      </div>
+    {% endif %}
+
+    {% if secret %}
+      <div class="form-group">
+        <label>Secret — <a href="#" class="js-toggle-secret-input">Edit</a></label>
+        <div class="js-secret-mask-input">
+          <p class="form-control-static">
+            ∗∗∗∗∗∗∗∗∗∗∗∗∗∗∗∗
+          </p>
+        </div>
+        <div class="js-secret-input">
+          <input type="password" name="secret" value="" class="form-control" maxlength="255">
+          <span class="help-block">
+            If you want to <a href="https://developer.github.com/webhooks/securing/#setting-your-secret-token" target="_blank">check signature</a>, input secret. And input also at Github webhook setting.
+          </span>
+        </div>
+        <input type="hidden" name="secret_update" value="false">
+      </div>
+    {% endif %}
+    {% if not secret %}
+      <div class="form-group">
+        <label>Secret</label>
+        <input type="password" name="secret" value="" class="form-control" maxlength="255">
+        <span class="help-block">
+          If you want to <a href="https://developer.github.com/webhooks/securing/#setting-your-secret-token" target="_blank">check signature</a>, input secret. And input also at Github webhook setting.
+        </span>
+        <input type="hidden" name="secret_update" value="true">
+      </div>
+    {% endif %}
+
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" name="description" value="{{ description }}" class="form-control" required maxlength="255">
+    </div>
+
+    <h3>Webhook Templates</h3>
+    <p>
+      Write by <a href="http://jinja.pocoo.org/docs/dev/" target="_blank">Jinja2</a>.<br>
+      When rendered text is empty, ghe-line-notify does NOT send to LINE Notify.<br>
+      Github explanation page is <a href="https://developer.github.com/webhooks/#events" target="_blank">here</a>.
+    </p>
+    <div class="row">
+      {% for support_event in support_events %}
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>{{ support_event }}</label>
+            <textarea name="template.{{ support_event }}" class="form-control" rows="7" maxlength="1000">{{ templates[support_event] }}</textarea>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div>
+      <input type=hidden name=_csrf_token value="{{ csrf_token() }}">
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+  </form>
+
+  {% if code %}
+  <form method="post" action="/token/delete" class="delete-token" style="margin-top: -27px;">
+    <div class="text-right">
+      <input type="hidden" name="code" value="{{ code }}">
+      <input type=hidden name=_csrf_token value="{{ csrf_token() }}">
+      <button class="btn btn-xs btn-default" type="submit"><span class="text-danger">Delete</span></button>
+    </div>
+  </form>
+  {% endif %}
+
+  <script>
+    $(function () {
+      // behavior for token and secret.
+      var maskedFormApply = function(toggleBtn, input, maskInput, updateFlagInput) {
+        var $input = $(input);
+        var inputInnerHtml = $input.html();
+        var $maskInput = $(maskInput);
+        var maskInputInnerHtml;
+        var $updateFlagInput = $(updateFlagInput);
+
+        $input.html('');
+
+        $(toggleBtn).on('click', function(event) {
+          var $this = $(this);
+          event.preventDefault();
+          if ($this.text() === 'Edit') {
+            $this.text('Cancel');
+            $updateFlagInput.val('true');
+
+            $input.html(inputInnerHtml);
+            maskInputInnerHtml = $maskInput.html();
+            $maskInput.html('');
+          } else {
+            $this.text('Edit');
+            $updateFlagInput.val('false');
+
+            inputInnerHtml = $input.html();
+            $input.html('');
+            $maskInput.html(maskInputInnerHtml);
+          }
+        });
+      }
+
+      maskedFormApply(
+        '.js-toggle-token-input', '.js-token-input', '.js-token-mask-input', 'input[name="token_update"]'
+      )
+      maskedFormApply(
+        '.js-toggle-secret-input', '.js-secret-input', '.js-secret-mask-input', 'input[name="secret_update"]'
+      )
+
+      $('.delete-token').on('submit', function (event) {
+        if (!confirm('Are you sure ?')) {
+          event.preventDefault();
+          return;
+        }
+      })
+    });
+  </script>
+{% endblock %}

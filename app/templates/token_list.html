@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2 class="page-header">
+    Token List
+  </h2>
+
+  <div>
+    <form class="form-inline">
+      <div class="form-group">
+        <input type="text" name="q_token" value="{{ q_token }}" class="form-control" placeholder="Search by LINE Notify token" style="width: 400px;">
+      </div>
+      <button type="submit" class="btn btn-default">Filter</button>
+    </form>
+  </div>
+
+  {% if tokens|length > 0 %}
+    <table class="table">
+      <caption class="text-right">{{ tokens|length }} tokens.</caption>
+      <thead>
+      <tr>
+        <th style="width: 340px;">Code</th>
+        <th>Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for token in tokens %}
+        <tr>
+          <td><a href="/token/{{ token.code }}">{{ token.code }}</a></td>
+          <td>{{ token.description }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  {% if tokens|length == 0 %}
+    <div class="well well-lg" style="margin-top: 20px;">No token.</div>
+  {% endif %}
+{% endblock %}
