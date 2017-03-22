@@ -3,7 +3,7 @@
 __commit_comment = '''
 {{ sender.login }} {{ action }} comment on commit {{ repository.full_name }}@{{ comment.commit_id|truncate(7, True, '') }}
 
-{{ comment.body|truncate }}
+{{ comment.body|trim|truncate }}
 
 {{ comment.html_url }}
 '''
@@ -23,7 +23,7 @@ __delete = '''
 __issue_comment = '''
 {{ sender.login }} {{ action }} comment on issue {{ repository.full_name }}#{{ issue.number }}
 
-{{ comment.body|truncate }}
+{{ comment.body|trim|truncate }}
 
 {{ comment.html_url }}
 '''
@@ -31,7 +31,7 @@ __issue_comment = '''
 __issues = '''
 {{ sender.login }} {{ action }} issue {{ repository.full_name }}#{{ issue.number }}
 
-{{ issue.title|truncate }}
+{{ issue.title|trim|truncate }}
 
 {{ issue.html_url }}
 '''
@@ -39,15 +39,32 @@ __issues = '''
 __pull_request = '''
 {{ sender.login }} {{ action }} pull-request {{ repository.full_name }}#{{ pull_request.number }}
 
-{{ pull_request.title|truncate }}
+{{ pull_request.title|trim|truncate }}
 
 {{ pull_request.html_url }}
+'''
+
+__pull_request_review = '''
+{%- if action == 'submitted' -%}
+{%- if review.state == 'commented' and not review.body  -%}
+{%- else -%}
+{{ sender.login }} {{ action }} {{ review.state }}-review on {{ repository.full_name }}#{{ pull_request.number }}
+{% if review.body %}
+{{ review.body|trim|truncate }}
+{% endif %}
+{{ review.html_url }}
+{%- endif -%}
+{%- elif action == 'dismissed' -%}
+{{ review.user.login }}’s {{ review.state }}-review on {{ repository.full_name }}#{{ pull_request.number }} was dismissed
+
+{{ review.html_url }}
+{%- endif -%}
 '''
 
 __pull_request_review_comment = '''
 {{ sender.login }} {{ action }} comment on pull-request {{ repository.full_name }}#{{ pull_request.number }}
 
-{{ comment.body|truncate }}
+{{ comment.body|trim|truncate }}
 
 {{ comment.html_url }}
 '''
@@ -55,10 +72,10 @@ __pull_request_review_comment = '''
 __push = '''
 {%- if commits|length > 0 -%}
 {%- set rest_commits_length = commits|length - 3 -%}
-{{ sender.login }} pushed to {{ ref|simplify_branch }} at {{ repository.full_name}}
+{{ sender.login }} pushed to {{ ref|simplify_branch }} at {{ repository.full_name }}
 {% for commit in commits %}
 {%- if loop.index <= 3 %}
-  - {{ commit.message|truncate(30) }} ({{ commit.id|truncate(7, True, '') }})
+  - {{ commit.message|trim|truncate(30) }} ({{ commit.id|truncate(7, True, '') }})
 {%- endif %}
 {%- endfor %}
 {%- if rest_commits_length > 0 %}
