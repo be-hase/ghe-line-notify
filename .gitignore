@@ -76,6 +76,7 @@ target/
 
 # IDEA
 .idea
+*.iml
 
 # sqlite
 app.db

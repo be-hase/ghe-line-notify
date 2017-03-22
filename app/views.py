@@ -18,10 +18,34 @@ from .models import Template
 from .models import Token
 from .models import db
 
+# https://developer.github.com/webhooks/#events
 SUPPORT_EVENTS = [
-    'commit_comment', 'create', 'delete', 'deployment', 'deployment_status', 'fork', 'gollum', 'issue_comment',
-    'issues', 'member', 'page_build', 'public', 'pull_request_review_comment', 'pull_request', 'push',
-    'repository', 'release', 'status', 'team_add', 'watch'
+    'commit_comment',
+    'create',
+    'delete',
+    'deployment',
+    'deployment_status',
+    'fork',
+    'gollum',
+    'issue_comment',
+    'issues',
+    'label',
+    'member',
+    'milestone',
+    'page_build',
+    'project_card',
+    'project_column',
+    'project',
+    'public',
+    'pull_request_review_comment',
+    'pull_request_review',
+    'pull_request',
+    'push',
+    'release',
+    'repository',
+    'status',
+    'team_add',
+    'watch'
 ]
 
 
